@@ -1,0 +1,34 @@
+#!/usr/local/bin/zsh
+
+echo ''
+echo 'brew update & upgrade...'
+brew update && brew upgrade --all && echo '...finished.'
+
+echo ""
+echo "Fix permission..."
+sudo chown -R $USER\:admin $(brew --prefix) >/dev/null 2>&1
+echo '...fixed.'
+
+sudo chmod -R 777 /usr/local/Caskroom/
+
+for cask in $( brew cask list ); do
+	echo "Cask: ${cask}"
+	version=`brew cask info ${cask} | fgrep "${cask}:"`
+	if [[ $(echo ${version} | fgrep "latest") ]]; then
+		brew cask install ${cask} --force
+	else
+		brew cask install ${cask}
+	fi
+done
+open /Applications/Karabiner.app
+
+echo "Remove old verions of cask."
+for cask in /usr/local/Caskroom/*; do
+	vl=(`ls -t ${cask}`) && for version in "${vl[@]:1}"; do
+		rm -rf "${cask}/${version}";
+	done
+done
+
+#clean up
+brew cask cleanup
+brew cleanup
