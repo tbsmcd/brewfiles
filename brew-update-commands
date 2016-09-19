@@ -4,12 +4,7 @@ echo ''
 echo 'brew update & upgrade...'
 brew update && brew upgrade --all && echo '...finished.'
 
-echo ""
-echo "Fix permission..."
-sudo chown -R $USER\:admin $(brew --prefix) >/dev/null 2>&1
-echo '...fixed.'
-
-sudo chmod -R 777 /usr/local/Homebrew/Caskroom/
+#sudo chmod -R 777 /usr/local/Homebrew/Caskroom/
 
 for cask in $( brew cask list ); do
 	echo "Cask: ${cask}"
