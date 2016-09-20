@@ -4,21 +4,26 @@ echo ''
 echo 'brew update & upgrade...'
 brew update && brew upgrade --all && echo '...finished.'
 
-#sudo chmod -R 777 /usr/local/Homebrew/Caskroom/
+sudo chown -R $(whoami):staff /usr/local/Caskroom/
 
 for cask in $( brew cask list ); do
-	echo "Cask: ${cask}"
-	version=`brew cask info ${cask} | fgrep "${cask}:"`
-	if [[ $(echo ${version} | fgrep "latest") ]]; then
+	echo "App: "${cask}
+	info=`brew cask info ${cask}`
+	version=`echo ${info} | fgrep "${cask}: " | sed "s/${cask}: //"`
+	if [ ${version} = "latest" ]; then
+		echo "latest version (force update)."
 		brew cask install ${cask} --force
+	elif [[ $(echo ${info} | fgrep "/usr/local" | fgrep "${version}") ]]; then
+		echo "latest version (not update)."
 	else
-		brew cask install ${cask}
+		echo "old version (update)."
+		brew cask install ${cask} --force
 	fi
 done
 open /Applications/Karabiner.app
 
 echo "Remove old verions of cask."
-for cask in /usr/local/Homebrew/Caskroom/*; do
+for cask in /usr/local/Caskroom/*; do
 	vl=(`ls -t ${cask}`) && for version in "${vl[@]:1}"; do
 		rm -rf "${cask}/${version}";
 	done
