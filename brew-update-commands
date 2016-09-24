@@ -18,9 +18,11 @@ for cask in $( brew cask list ); do
 	else
 		echo "old version (update)."
 		brew cask install ${cask} --force
+		if [ ${cask} = "karabiner" ]; then
+			open /Applications/Karabiner.app
+		fi
 	fi
 done
-open /Applications/Karabiner.app
 
 echo "Remove old verions of cask."
 for cask in /usr/local/Caskroom/*; do
