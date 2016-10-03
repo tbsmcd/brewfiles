@@ -2,7 +2,7 @@
 
 echo ''
 echo 'brew update & upgrade...'
-brew update && brew upgrade --all && echo '...finished.'
+brew update && brew upgrade && echo '...finished.'
 
 sudo chown -R $(whoami):staff /usr/local/Caskroom/
 
