@@ -34,3 +34,6 @@ done
 #clean up
 brew cask cleanup
 brew cleanup
+
+echo "Rebuilding the Spotlight index."
+sudo mdutil -E /
